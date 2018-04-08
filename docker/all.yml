@@ -11,17 +11,19 @@ spec:
     spec:
       containers:
       - name: app
-        image: test-app
+        image: glennc/fancypants:latest #miosaksregistry.azurecr.io/test-app
         ports:
-        - containerPort: 8000
-          name: app
+        - containerPort: 80
+      imagePullSecrets:
+      - name: "miosaksregistry"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: app
 spec:
+  type: LoadBalancer
   ports:
-  - port: 8000
+  - port: 80
   selector:
     app: app

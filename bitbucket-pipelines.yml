@@ -18,8 +18,10 @@ pipelines:
           - python app/manage.py test
           # Build image
           - SHORT_HASH=`git log -1 --pretty=format:%h`
-          - IMAGE_TAG=$DOCKER_REGISTRY/pyapp:$SHORT_HASH
-          - docker build -t $IMAGE_TAG -f docker/Dockerfile .
+          - IMAGE_NAME=$DOCKER_REGISTRY/pyapp
+          - IMAGE_NAME_WITH_TAG=$IMAGE_NAME:$SHORT_HASH
+          - docker build -t $IMAGE_NAME_WITH_TAG -f docker/Dockerfile .
+          - docker tag $IMAGE_NAME_WITH_TAG $IMAGE_NAME:latest
           - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
           - docker push $IMAGE_TAG
           # Install kubectl

@@ -27,7 +27,7 @@ pipelines:
           - chmod +x ./kubectl
           - mv ./kubectl /usr/local/bin/kubectl
           # Configure kubectl
-          - kubectl config set-cluster default-cluster --server=$CLUSTER_URL
+          - kubectl config set-cluster default-cluster --server=$CLUSTER_URL --insecure-skip-tls-verify=true
           - kubectl config set-credentials default-user --bearer=$CLUSTER_TOKEN
           - kubectl config set-context default --cluster=default-cluster --user=default-user
           - kubectl config use-context default

@@ -7,11 +7,12 @@ spec:
   template:
     metadata:
       labels:
+        branch: $BRANCH
         app: app
     spec:
       containers:
       - name: app
-        image: miosaksregistry.azurecr.io/pyapp
+        image: miosaksregistry.azurecr.io/pyapp:$TAG
         ports:
         - containerPort: 80
       imagePullSecrets:

@@ -23,7 +23,7 @@ pipelines:
           - docker build -t $IMAGE_NAME_WITH_TAG -f docker/Dockerfile .
           - docker tag $IMAGE_NAME_WITH_TAG $IMAGE_NAME:latest
           - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
-          - docker push $IMAGE_TAG
+          - docker push $IMAGE_NAME
           # Install kubectl
           - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
           - chmod +x ./kubectl

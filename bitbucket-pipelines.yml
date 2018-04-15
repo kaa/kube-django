@@ -1,0 +1,33 @@
+# This is a sample build configuration for Python.
+# Check our guides at https://confluence.atlassian.com/x/x4UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: python:3.5.1
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - pip
+        script: # Modify the commands below to build your repository.
+          - pip install -r requirements.txt
+          - python -m compileall .
+          - python manage.py test
+        artifacts:
+          - "**/*.py"
+          - "**/templates/**/*.html"
+          - "requirements.txt"
+          - "Dockerfile"
+          - "docker-compose.yml"
+    - step:
+        caches:
+          - docker
+        script:
+          - SHORT_HASH=`git log -1 --pretty=format:%h`
+          - IMAGE_TAG=$DOCKER_REGISTRY/pyapp:$SHORT_HASH
+          - docker build -t $IMAGE_TAG .
+          - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
+          - docker push $IMAGE_TAG
+options:
+  docker: true

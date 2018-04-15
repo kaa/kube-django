@@ -34,6 +34,6 @@ pipelines:
           - kubectl config set-context default --cluster=default-cluster --user=default-user
           - kubectl config use-context default
           # Update app in kubernetes
-          - kubectl apply -f docker/all.yml
+          - kubectl replace -f docker/all.yml
 options:
   docker: true

@@ -10,24 +10,27 @@ pipelines:
     - step:
         caches:
           - pip
-        script: # Modify the commands below to build your repository.
-          - pip install -r requirements.txt
-          - python -m compileall .
-          - python manage.py test
-        artifacts:
-          - "**/*.py"
-          - "**/templates/**/*.html"
-          - "requirements.txt"
-          - "Dockerfile"
-          - "docker-compose.yml"
-    - step:
-        caches:
-          - docker
-        script:
+        script: 
+          # Install, compile and test app
+          - pip install -r app/requirements.txt
+          - python -m compileall app
+          - python app/manage.py test
+          # Build image
           - SHORT_HASH=`git log -1 --pretty=format:%h`
           - IMAGE_TAG=$DOCKER_REGISTRY/pyapp:$SHORT_HASH
-          - docker build -t $IMAGE_TAG .
+          - docker build -t $IMAGE_TAG -f docker/Dockerfile .
           - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
           - docker push $IMAGE_TAG
+          # Install kubectl
+          - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+          - chmod +x ./kubectl
+          - sudo mv ./kubectl /usr/local/bin/kubectl
+          # Configure kubectl
+          - kubectl config set-cluster default-cluster --server=$CLUSTER_URL
+          - kubectl config set-credentials default-user --bearer=$CLUSTER_TOKEN
+          - kubectl config set-context default --cluster=default-cluster --user=default-user
+          - kubectl config use-context default
+          # Update app in kubernetes
+          - kubectl apply -f docker/all.yml
 options:
   docker: true

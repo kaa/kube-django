@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'applicationinsights.django.ApplicationInsightsMiddleware',
 ]
 
 ROOT_URLCONF = 'kube.urls'
@@ -119,3 +120,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Application Insights
+APPLICATION_INSIGHTS = {
+    'ikey': "4c221799-cd79-4b43-91ca-f88932de97cb",
+    'use_view_name': True,
+    'record_view_arguments': True,
+    'log_exceptions': True,
+    'send_interval': 1.0, # Check every second
+    'send_time': 3.0, # Wait up to 3 seconds for an event
+}

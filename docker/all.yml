@@ -1,17 +1,19 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: app
+  name: app-$BRANCH
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: app
+        branch: $BRANCH
+        tag: $TAG
     spec:
       containers:
       - name: app
-        image: miosaksregistry.azurecr.io/pyapp:TAG
+        image: miosaksregistry.azurecr.io/pyapp:$TAG
         ports:
         - containerPort: 80
       imagePullSecrets:
@@ -20,10 +22,34 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app
+  name: app-$BRANCH
+  labels:
+    app: app
+    branch: $BRANCH
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
   - port: 80
   selector:
     app: app
+    branch: $BRANCH
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: app
+  labels:
+    app: app
+    branch: $BRANCH
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host: "$BRANCH.app.test"
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: app-$BRANCH
+          servicePort: 80

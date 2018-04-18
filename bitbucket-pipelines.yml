@@ -33,6 +33,6 @@ pipelines:
           - kubectl config set-context default --cluster=default-cluster --user=default-user
           - kubectl config use-context default
           # Update app in kubernetes
-          - sed "s/$TAG/$SHORT_HASH/g; s/$BRANCH/$BITBUCKET_BRANCH/g" docker/all.yml | kubectl apply -f -
+          - sed "s/\$TAG/$SHORT_HASH/g; s/\$BRANCH/$BITBUCKET_BRANCH/g" docker/all.yml | kubectl apply -f -
 options:
   docker: true

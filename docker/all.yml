@@ -9,7 +9,6 @@ spec:
       labels:
         app: app
         branch: $BRANCH
-        tag: $TAG
     spec:
       containers:
       - name: app
@@ -46,7 +45,7 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-  - host: "$BRANCH.app.test"
+  - host: "$BRANCH.k8s.monogra.fi"
     http:
       paths:
       - path: /

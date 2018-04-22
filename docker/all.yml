@@ -4,6 +4,7 @@ metadata:
   name: app-$BRANCH
 spec:
   replicas: 1
+  revisionHistoryLimit: 0
   template:
     metadata:
       labels:
@@ -13,8 +14,13 @@ spec:
       containers:
       - name: app
         image: miosaksregistry.azurecr.io/pyapp:$TAG
+        env:
+        - name: "PYTHONUNBUFFERED"
+          value: "0"
         ports:
         - containerPort: 80
+      - name: db
+        image: postgres
       imagePullSecrets:
       - name: "miosaksregistry"
 ---

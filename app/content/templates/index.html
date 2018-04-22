@@ -2,4 +2,16 @@
   <p>Hello how are you doing today?</p>
   <p>It's <b>{{ weather }}</b> today right?</p>
   <p>Old boring master here!</p>
+  {% if texts %}
+  <ul>
+    {% for text in texts %}
+      <li>{{ text }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <form action="{% url "content" %}" method="post">
+    {% csrf_token %}
+    <textarea name="text"></textarea>
+    <p><input type="submit"></p>
+  </form>
 </html>

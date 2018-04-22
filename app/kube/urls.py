@@ -20,5 +20,5 @@ import content.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', content.views.IndexView.as_view())
+    path('', content.views.index, name="content")
 ]

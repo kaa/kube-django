@@ -14,7 +14,7 @@ pipelines:
           # Install, compile and test app
           - pip install -r app/requirements.txt
           - python -m compileall app
-          - python app/manage.py test
+          #- python app/manage.py test
           # Build image
           - SHORT_HASH=`git log -1 --pretty=format:%h`
           - IMAGE_NAME=$DOCKER_REGISTRY/pyapp

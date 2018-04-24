@@ -7,7 +7,7 @@ if [ "$?" -ne "0" ]; then
   exit 1
 fi
 echo 'ready'
-
+sleep 2
 echo 'Migrating'
 python app/manage.py migrate
 echo 'Running application'

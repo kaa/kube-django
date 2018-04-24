@@ -36,7 +36,8 @@ spec:
         - containerPort: 80
         volumeMounts:
         - name: pg-data-volume
-          mountPath: /var/lib/postgresql/dat
+          mountPath: /var/lib/postgresql/data
+          subPath: data
       imagePullSecrets:
       - name: "miosaksregistry"
       volumes:
